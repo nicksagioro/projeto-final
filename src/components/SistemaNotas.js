@@ -1,5 +1,6 @@
 'use client';
 import React, { useState } from 'react';
+import './components/page.module.css'; 
 
 const TOTAL_ALUNOS = 15;
 const TOTAL_MATERIAS = 3;
@@ -455,7 +456,7 @@ const App = () => {
       <header className="header">
         <div className="header-container">
           <div className="logo-container">
-            <img className="senai" src="../imagem/senai-logo2.png" ></img>
+            <img className="senai" src="../imagem/senai-logo.png" ></img>
           </div>
           <div className="header-content">
             <p className="subtitle">SENAI - Serviço Nacional de Aprendizagem Industrial</p>
