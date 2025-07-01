@@ -1,4 +1,4 @@
-import styles from "./page.module.css";
+import style from "./page.module.css";
 import SistemaNotas from '../components/SistemaNotas';
 
 export default function Home() {

@@ -1,31 +1,17 @@
-import React, { useState, useEffect } from 'react';
+'use client';
+import React, { useState } from 'react';
 
-const SistemaEscolar = () => {
-  // Constantes
-  const TOTAL_ALUNOS = 15;
-  const TOTAL_MATERIAS = 3;
-  const materias = ["Matemática", "Português", "Ciências"];
+const TOTAL_ALUNOS = 15;
+const TOTAL_MATERIAS = 3;
+const materias = ["Matemática", "Português", "Ciências"];
 
-  // Estado inicial das turmas
+const App = () => {
   const [turmas, setTurmas] = useState({
-    0: [ // Matemática
-      "Ana", "Bruno", "Camila", "Diego", "Eduarda", 
-      "Felipe", "Gabriela", "Henrique", "Isabela", "João",
-      "VAGA", "VAGA", "VAGA", "VAGA", "VAGA"
-    ],
-    1: [ // Português
-      "Lucas", "Marina", "Nina", "Otávio", "Patrícia", 
-      "Quirino", "Rafael", "Sofia", "Tiago", "Ursula",
-      "VAGA", "VAGA", "VAGA", "VAGA", "VAGA"
-    ],
-    2: [ // Ciências
-      "Valéria", "William", "Xuxa", "Yara", "Zeca", 
-      "Alex", "Bia", "Carlos", "Dora", "Elena",
-      "VAGA", "VAGA", "VAGA", "VAGA", "VAGA"
-    ]
+    0: ["Ana", "Bruno", "Camila", "Diego", "Eduarda", "Felipe", "Gabriela", "Henrique", "Isabela", "João", "VAGA", "VAGA", "VAGA", "VAGA", "VAGA"],
+    1: ["Lucas", "Marina", "Nina", "Otávio", "Patrícia", "Quirino", "Rafael", "Sofia", "Tiago", "Ursula", "VAGA", "VAGA", "VAGA", "VAGA", "VAGA"],
+    2: ["Valéria", "William", "Xuxa", "Yara", "Zeca", "Alex", "Bia", "Carlos", "Dora", "Elena", "VAGA", "VAGA", "VAGA", "VAGA", "VAGA"]
   });
 
-  // Estados para notas
   const [notas, setNotas] = useState({
     nota1: Array(TOTAL_MATERIAS).fill().map(() => Array(TOTAL_ALUNOS).fill(-1)),
     nota2: Array(TOTAL_MATERIAS).fill().map(() => Array(TOTAL_ALUNOS).fill(-1)),
@@ -34,141 +20,136 @@ const SistemaEscolar = () => {
     mediaFinal: Array(TOTAL_MATERIAS).fill().map(() => Array(TOTAL_ALUNOS).fill(-1))
   });
 
-  // Estados da interface
   const [opcaoAtiva, setOpcaoAtiva] = useState(null);
-  const [output, setOutput] = useState('Sistema Escolar iniciado. Selecione uma opção no menu.');
+  const [output, setOutput] = useState('');
   const [mostrarRecuperacao, setMostrarRecuperacao] = useState(false);
 
-  // Estados dos formulários
   const [formData, setFormData] = useState({
     materia: 0,
-    aluno: 0,
+    alunoIndex: 0,
     nota1: '',
     nota2: '',
     recuperacao: '',
     nomeAluno: ''
   });
 
-  // Função para calcular médias
-  const calcularMedias = (materia, aluno, nota1Val, nota2Val, recuperacaoVal = -1) => {
-    const mediaInic = (nota1Val + nota2Val) / 2;
-    let mediaFin = mediaInic;
-    
-    if (mediaInic < 7 && recuperacaoVal >= 0) {
-      mediaFin = (mediaInic + recuperacaoVal) / 2;
-    }
-    
-    setNotas(prev => {
-      const newNotas = { ...prev };
-      newNotas.mediaInicial[materia][aluno] = mediaInic;
-      newNotas.mediaFinal[materia][aluno] = mediaFin;
-      return newNotas;
-    });
-    
-    return { mediaInicial: mediaInic, mediaFinal: mediaFin };
-  };
-
-  // Função para obter alunos válidos de uma matéria
-  const getAlunosValidos = (materia, apenasComNotas = false) => {
-    return turmas[materia]
-      .map((nome, index) => ({ nome, index }))
-      .filter(({ nome, index }) => {
-        if (nome === 'VAGA') return false;
-        if (apenasComNotas) return notas.nota1[materia][index] >= 0;
-        return true;
-      });
-  };
-
-  // Handlers dos formulários
   const handleInputChange = (field, value) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
   };
 
-  // Opção 1: Inserir notas
+  const clearForm = () => {
+    setFormData({
+      materia: 0,
+      alunoIndex: 0,
+      nota1: '',
+      nota2: '',
+      recuperacao: '',
+      nomeAluno: ''
+    });
+    setMostrarRecuperacao(false);
+  };
+
+  const getAlunosOptions = (materia) => {
+    return turmas[materia]
+      .map((nome, index) => nome !== 'VAGA' ? { value: index, label: `${index} - ${nome}` } : null)
+      .filter(option => option !== null);
+  };
+
+  const getAlunosComNotasOptions = (materia) => {
+    return turmas[materia]
+      .map((nome, index) => {
+        if (nome !== 'VAGA' && notas.nota1[materia][index] >= 0) {
+          return { value: index, label: `${index} - ${nome}` };
+        }
+        return null;
+      })
+      .filter(option => option !== null);
+  };
+
   const inserirNotas = () => {
-    const { materia, aluno, nota1: n1, nota2: n2, recuperacao: rec } = formData;
-    
-    if (!n1 || !n2 || isNaN(n1) || isNaN(n2)) {
-      setOutput('Por favor, insira valores válidos para as notas.');
+    const { materia, alunoIndex, nota1, nota2, recuperacao } = formData;
+    const nota1Val = parseFloat(nota1);
+    const nota2Val = parseFloat(nota2);
+
+    // Validação de notas
+    if (
+      isNaN(nota1Val) || isNaN(nota2Val) ||
+      nota1Val < 0 || nota1Val > 10 ||
+      nota2Val < 0 || nota2Val > 10
+    ) {
+      setOutput('Por favor, insira notas entre 0 e 10.');
       return;
     }
-    
-    const nota1Val = parseFloat(n1);
-    const nota2Val = parseFloat(n2);
-    
-    setNotas(prev => {
-      const newNotas = { ...prev };
-      newNotas.nota1[materia][aluno] = nota1Val;
-      newNotas.nota2[materia][aluno] = nota2Val;
-      return newNotas;
-    });
-    
-    const { mediaInicial, mediaFinal } = calcularMedias(materia, aluno, nota1Val, nota2Val);
-    
+
+    // Cópia profunda dos arrays internos
+    const newNotas = {
+      ...notas,
+      nota1: notas.nota1.map(arr => [...arr]),
+      nota2: notas.nota2.map(arr => [...arr]),
+      recuperacao: notas.recuperacao.map(arr => [...arr]),
+      mediaInicial: notas.mediaInicial.map(arr => [...arr]),
+      mediaFinal: notas.mediaFinal.map(arr => [...arr]),
+    };
+
+    newNotas.nota1[materia][alunoIndex] = nota1Val;
+    newNotas.nota2[materia][alunoIndex] = nota2Val;
+    const mediaInicial = (nota1Val + nota2Val) / 2;
+    newNotas.mediaInicial[materia][alunoIndex] = mediaInicial;
+
     if (mediaInicial < 7) {
-      setMostrarRecuperacao(true);
-      setOutput(`Média inicial: ${mediaInicial.toFixed(2)}\nAluno precisa de recuperação. Digite a nota de recuperação.`);
+      if (recuperacao && !isNaN(parseFloat(recuperacao)) && parseFloat(recuperacao) >= 0 && parseFloat(recuperacao) <= 10) {
+        const recuperacaoVal = parseFloat(recuperacao);
+        newNotas.recuperacao[materia][alunoIndex] = recuperacaoVal;
+        const mediaFinal = (mediaInicial + recuperacaoVal) / 2;
+        newNotas.mediaFinal[materia][alunoIndex] = mediaFinal;
+        setNotas(newNotas);
+        setOutput(`Notas inseridas com sucesso!\nMédia inicial: ${mediaInicial.toFixed(2)}\nMédia final: ${mediaFinal.toFixed(2)}`);
+        setMostrarRecuperacao(false);
+        clearForm();
+      } else {
+        setNotas(newNotas);
+        setOutput(`Média inicial: ${mediaInicial.toFixed(2)}\nAluno precisa de recuperação. Digite a nota de recuperação e clique em "Inserir Notas" novamente.`);
+        setMostrarRecuperacao(true);
+      }
     } else {
-      setMostrarRecuperacao(false);
-      setOutput(`Notas inseridas com sucesso!\nMédia final: ${mediaFinal.toFixed(2)}`);
+      newNotas.mediaFinal[materia][alunoIndex] = mediaInicial;
+      setNotas(newNotas);
+      setOutput(`Notas inseridas com sucesso!\nMédia final: ${mediaInicial.toFixed(2)}`);
+      clearForm();
     }
   };
 
-  const aplicarRecuperacao = () => {
-    const { materia, aluno, nota1: n1, nota2: n2, recuperacao: rec } = formData;
-    
-    if (!rec || isNaN(rec)) return;
-    
-    const recuperacaoVal = parseFloat(rec);
-    const nota1Val = parseFloat(n1);
-    const nota2Val = parseFloat(n2);
-    
-    setNotas(prev => {
-      const newNotas = { ...prev };
-      newNotas.recuperacao[materia][aluno] = recuperacaoVal;
-      return newNotas;
-    });
-    
-    const { mediaFinal } = calcularMedias(materia, aluno, nota1Val, nota2Val, recuperacaoVal);
-    setOutput(`Notas inseridas com sucesso!\nMédia final: ${mediaFinal.toFixed(2)}`);
-  };
-
-  // Opção 2: Imprimir boletim
   const imprimirBoletim = () => {
-    const { materia, aluno } = formData;
-    
-    if (notas.nota1[materia][aluno] < 0) {
+    const { materia, alunoIndex } = formData;
+    if (notas.nota1[materia][alunoIndex] < 0) {
       setOutput('Aluno inválido ou sem notas lançadas!');
       return;
     }
-    
-    const nomeAluno = turmas[materia][aluno];
+    const nomeAluno = turmas[materia][alunoIndex];
     let boletim = `--- Boletim do aluno: ${nomeAluno} - ${materias[materia]} ---\n`;
-    boletim += `Nota 1: ${notas.nota1[materia][aluno]}\n`;
-    boletim += `Nota 2: ${notas.nota2[materia][aluno]}\n`;
-    boletim += `Média Inicial: ${notas.mediaInicial[materia][aluno].toFixed(2)}\n`;
-    
-    if (notas.mediaInicial[materia][aluno] < 7) {
-      boletim += `Nota Recuperação: ${notas.recuperacao[materia][aluno]}\n`;
+    boletim += `Nota 1: ${notas.nota1[materia][alunoIndex]}\n`;
+    boletim += `Nota 2: ${notas.nota2[materia][alunoIndex]}\n`;
+    boletim += `Média Inicial: ${notas.mediaInicial[materia][alunoIndex].toFixed(2)}\n`;
+    if (notas.mediaInicial[materia][alunoIndex] < 7) {
+      boletim += `Nota Recuperação: ${notas.recuperacao[materia][alunoIndex]}\n`;
     }
-    
-    boletim += `Média Final: ${notas.mediaFinal[materia][aluno].toFixed(2)}\n`;
+    boletim += `Média Final: ${notas.mediaFinal[materia][alunoIndex].toFixed(2)}\n`;
     setOutput(boletim);
   };
 
-  // Opção 3: Média da turma
   const mostrarMediaTurma = () => {
     const { materia } = formData;
     let soma = 0;
     let contador = 0;
-    
     for (let i = 0; i < TOTAL_ALUNOS; i++) {
       if (notas.mediaFinal[materia][i] >= 0) {
         soma += notas.mediaFinal[materia][i];
         contador++;
       }
     }
-    
     if (contador > 0) {
       setOutput(`Média da turma de ${materias[materia]}: ${(soma / contador).toFixed(2)}`);
     } else {
@@ -176,373 +157,384 @@ const SistemaEscolar = () => {
     }
   };
 
-  // Opção 4: Adicionar aluno
   const adicionarAluno = () => {
     const { materia, nomeAluno } = formData;
-    
     if (!nomeAluno.trim()) {
       setOutput('Por favor, digite um nome válido.');
       return;
     }
-    
+    // Cópia do array interno
+    const newTurmas = {
+      ...turmas,
+      [materia]: [...turmas[materia]]
+    };
     for (let i = 0; i < TOTAL_ALUNOS; i++) {
-      if (turmas[materia][i] === 'VAGA') {
-        setTurmas(prev => {
-          const newTurmas = { ...prev };
-          newTurmas[materia][i] = nomeAluno.trim();
-          return newTurmas;
-        });
+      if (newTurmas[materia][i] === 'VAGA') {
+        newTurmas[materia][i] = nomeAluno.trim();
+        setTurmas(newTurmas);
         setOutput(`Aluno ${nomeAluno} adicionado na posição ${i}`);
-        setFormData(prev => ({ ...prev, nomeAluno: '' }));
+        clearForm();
         return;
       }
     }
-    
     setOutput('Não há vagas disponíveis nessa turma!');
   };
 
-  // Opção 5: Remover aluno
   const removerAluno = () => {
-    const { materia, aluno } = formData;
-    
-    if (turmas[materia][aluno] === 'VAGA') {
+    const { materia, alunoIndex } = formData;
+    if (turmas[materia][alunoIndex] === 'VAGA') {
       setOutput('Aluno inválido!');
       return;
     }
-    
-    const nomeAluno = turmas[materia][aluno];
-    
-    setTurmas(prev => {
-      const newTurmas = { ...prev };
-      newTurmas[materia][aluno] = 'VAGA';
-      return newTurmas;
-    });
-    
-    // Resetar notas
-    setNotas(prev => {
-      const newNotas = { ...prev };
-      newNotas.nota1[materia][aluno] = -1;
-      newNotas.nota2[materia][aluno] = -1;
-      newNotas.recuperacao[materia][aluno] = -1;
-      newNotas.mediaInicial[materia][aluno] = -1;
-      newNotas.mediaFinal[materia][aluno] = -1;
-      return newNotas;
-    });
-    
+    const nomeAluno = turmas[materia][alunoIndex];
+    const newTurmas = {
+      ...turmas,
+      [materia]: [...turmas[materia]]
+    };
+    newTurmas[materia][alunoIndex] = 'VAGA';
+
+    // Cópia profunda dos arrays internos
+    const newNotas = {
+      ...notas,
+      nota1: notas.nota1.map(arr => [...arr]),
+      nota2: notas.nota2.map(arr => [...arr]),
+      recuperacao: notas.recuperacao.map(arr => [...arr]),
+      mediaInicial: notas.mediaInicial.map(arr => [...arr]),
+      mediaFinal: notas.mediaFinal.map(arr => [...arr]),
+    };
+    newNotas.nota1[materia][alunoIndex] = -1;
+    newNotas.nota2[materia][alunoIndex] = -1;
+    newNotas.recuperacao[materia][alunoIndex] = -1;
+    newNotas.mediaInicial[materia][alunoIndex] = -1;
+    newNotas.mediaFinal[materia][alunoIndex] = -1;
+
+    setTurmas(newTurmas);
+    setNotas(newNotas);
     setOutput(`Aluno ${nomeAluno} removido da turma.`);
   };
 
-  // Opção 6: Mostrar vagas
   const mostrarVagas = () => {
     const { materia } = formData;
     const vagas = turmas[materia].filter(nome => nome === 'VAGA').length;
     setOutput(`Vagas disponíveis na turma de ${materias[materia]}: ${vagas}/${TOTAL_ALUNOS}`);
   };
 
-  // Reset da recuperação quando muda opção
-  useEffect(() => {
-    setMostrarRecuperacao(false);
-    setFormData(prev => ({ ...prev, recuperacao: '' }));
-  }, [opcaoAtiva]);
-
-  return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
-        <h1 className="text-3xl font-bold text-center mb-8 text-blue-600">Sistema Escolar</h1>
-        
-        {/* Menu Principal */}
-        <div className="mb-8">
-          <h2 className="text-xl font-semibold mb-4 text-gray-700">Menu Principal</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {[
-              { id: 1, texto: '1 - Inserir notas de aluno' },
-              { id: 2, texto: '2 - Imprimir boletim de aluno' },
-              { id: 3, texto: '3 - Ver média da turma por matéria' },
-              { id: 4, texto: '4 - Adicionar aluno em uma turma' },
-              { id: 5, texto: '5 - Remover aluno de uma turma' },
-              { id: 6, texto: '6 - Ver vagas disponíveis' }
-            ].map(opcao => (
-              <button
-                key={opcao.id}
-                onClick={() => {
-                  setOpcaoAtiva(opcao.id);
-                  setOutput('');
-                }}
-                className="p-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors duration-200 text-left"
-              >
-                {opcao.texto}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Opção 1: Inserir Notas */}
-        {opcaoAtiva === 1 && (
-          <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-            <h3 className="text-lg font-semibold mb-4">Inserir Notas</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium mb-1">Matéria:</label>
-                <select 
-                  value={formData.materia} 
-                  onChange={(e) => handleInputChange('materia', parseInt(e.target.value))}
-                  className="w-full p-2 border rounded-lg"
+  const renderForm = () => {
+    switch (opcaoAtiva) {
+      case 1:
+        return (
+          <div className="form-section active">
+            <h3 className="form-title">📝 Inserir Notas de Aluno</h3>
+            <div className="form-grid">
+              <div className="form-group">
+                <label htmlFor="materia-nota">Matéria:</label>
+                <select
+                  id="materia-nota"
+                  value={formData.materia}
+                  onChange={e => handleInputChange('materia', Number(e.target.value))}
+                  className="form-control"
                 >
                   {materias.map((mat, idx) => (
                     <option key={idx} value={idx}>{mat}</option>
                   ))}
                 </select>
               </div>
-              
-              <div>
-                <label className="block text-sm font-medium mb-1">Aluno:</label>
-                <select 
-                  value={formData.aluno} 
-                  onChange={(e) => handleInputChange('aluno', parseInt(e.target.value))}
-                  className="w-full p-2 border rounded-lg"
+              <div className="form-group">
+                <label htmlFor="aluno-nota">Aluno:</label>
+                <select
+                  id="aluno-nota"
+                  value={formData.alunoIndex}
+                  onChange={e => handleInputChange('alunoIndex', Number(e.target.value))}
+                  className="form-control"
                 >
-                  {getAlunosValidos(formData.materia).map(({ nome, index }) => (
-                    <option key={index} value={index}>{index} - {nome}</option>
+                  {getAlunosOptions(formData.materia).map(option => (
+                    <option key={option.value} value={option.value}>{option.label}</option>
                   ))}
                 </select>
               </div>
-              
-              <div>
-                <label className="block text-sm font-medium mb-1">Nota 1:</label>
-                <input 
-                  type="number" 
-                  min="0" 
-                  max="10" 
-                  step="0.1"
+              <div className="form-group">
+                <label htmlFor="nota1">Nota 1:</label>
+                <input
+                  id="nota1"
+                  type="number"
                   value={formData.nota1}
-                  onChange={(e) => handleInputChange('nota1', e.target.value)}
-                  className="w-full p-2 border rounded-lg"
-                />
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium mb-1">Nota 2:</label>
-                <input 
-                  type="number" 
-                  min="0" 
-                  max="10" 
+                  onChange={e => handleInputChange('nota1', e.target.value)}
+                  className="form-control"
+                  min="0"
+                  max="10"
                   step="0.1"
-                  value={formData.nota2}
-                  onChange={(e) => handleInputChange('nota2', e.target.value)}
-                  className="w-full p-2 border rounded-lg"
                 />
               </div>
-              
+              <div className="form-group">
+                <label htmlFor="nota2">Nota 2:</label>
+                <input
+                  id="nota2"
+                  type="number"
+                  value={formData.nota2}
+                  onChange={e => handleInputChange('nota2', e.target.value)}
+                  className="form-control"
+                  min="0"
+                  max="10"
+                  step="0.1"
+                />
+              </div>
               {mostrarRecuperacao && (
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium mb-1">Nota de Recuperação:</label>
-                  <input 
-                    type="number" 
-                    min="0" 
-                    max="10" 
-                    step="0.1"
+                <div className="form-group">
+                  <label htmlFor="recuperacao">Nota de Recuperação:</label>
+                  <input
+                    id="recuperacao"
+                    type="number"
                     value={formData.recuperacao}
-                    onChange={(e) => {
-                      handleInputChange('recuperacao', e.target.value);
-                      if (e.target.value) aplicarRecuperacao();
-                    }}
-                    className="w-full p-2 border rounded-lg"
+                    onChange={e => handleInputChange('recuperacao', e.target.value)}
+                    className="form-control"
+                    min="0"
+                    max="10"
+                    step="0.1"
                   />
                 </div>
               )}
             </div>
-            
-            <button 
-              onClick={inserirNotas}
-              className="mt-4 px-6 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors"
-            >
-              Inserir Notas
-            </button>
+            <button onClick={inserirNotas} className="btn-primary">Inserir Notas</button>
           </div>
-        )}
-
-        {/* Opção 2: Imprimir Boletim */}
-        {opcaoAtiva === 2 && (
-          <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-            <h3 className="text-lg font-semibold mb-4">Imprimir Boletim</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium mb-1">Matéria:</label>
-                <select 
-                  value={formData.materia} 
-                  onChange={(e) => handleInputChange('materia', parseInt(e.target.value))}
-                  className="w-full p-2 border rounded-lg"
+        );
+      case 2:
+        return (
+          <div className="form-section active">
+            <h3 className="form-title">📊 Imprimir Boletim</h3>
+            <div className="form-grid">
+              <div className="form-group">
+                <label htmlFor="materia-boletim">Matéria:</label>
+                <select
+                  id="materia-boletim"
+                  value={formData.materia}
+                  onChange={e => handleInputChange('materia', Number(e.target.value))}
+                  className="form-control"
                 >
                   {materias.map((mat, idx) => (
                     <option key={idx} value={idx}>{mat}</option>
                   ))}
                 </select>
               </div>
-              
-              <div>
-                <label className="block text-sm font-medium mb-1">Aluno:</label>
-                <select 
-                  value={formData.aluno} 
-                  onChange={(e) => handleInputChange('aluno', parseInt(e.target.value))}
-                  className="w-full p-2 border rounded-lg"
+              <div className="form-group">
+                <label htmlFor="aluno-boletim">Aluno:</label>
+                <select
+                  id="aluno-boletim"
+                  value={formData.alunoIndex}
+                  onChange={e => handleInputChange('alunoIndex', Number(e.target.value))}
+                  className="form-control"
                 >
-                  {getAlunosValidos(formData.materia, true).map(({ nome, index }) => (
-                    <option key={index} value={index}>{index} - {nome}</option>
+                  {getAlunosComNotasOptions(formData.materia).map(option => (
+                    <option key={option.value} value={option.value}>{option.label}</option>
                   ))}
                 </select>
               </div>
             </div>
-            
-            <button 
-              onClick={imprimirBoletim}
-              className="mt-4 px-6 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors"
-            >
-              Imprimir Boletim
-            </button>
+            <button onClick={imprimirBoletim} className="btn-primary">Imprimir Boletim</button>
           </div>
-        )}
-
-        {/* Opção 3: Média da Turma */}
-        {opcaoAtiva === 3 && (
-          <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-            <h3 className="text-lg font-semibold mb-4">Média da Turma</h3>
-            <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">Matéria:</label>
-              <select 
-                value={formData.materia} 
-                onChange={(e) => handleInputChange('materia', parseInt(e.target.value))}
-                className="w-full p-2 border rounded-lg max-w-md"
-              >
-                {materias.map((mat, idx) => (
-                  <option key={idx} value={idx}>{mat}</option>
-                ))}
-              </select>
-            </div>
-            
-            <button 
-              onClick={mostrarMediaTurma}
-              className="px-6 py-2 bg-purple-500 hover:bg-purple-600 text-white rounded-lg transition-colors"
-            >
-              Ver Média
-            </button>
-          </div>
-        )}
-
-        {/* Opção 4: Adicionar Aluno */}
-        {opcaoAtiva === 4 && (
-          <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-            <h3 className="text-lg font-semibold mb-4">Adicionar Aluno</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium mb-1">Matéria:</label>
-                <select 
-                  value={formData.materia} 
-                  onChange={(e) => handleInputChange('materia', parseInt(e.target.value))}
-                  className="w-full p-2 border rounded-lg"
+        );
+      case 3:
+        return (
+          <div className="form-section active">
+            <h3 className="form-title">📈 Média da Turma</h3>
+            <div className="form-grid">
+              <div className="form-group">
+                <label htmlFor="materia-media">Matéria:</label>
+                <select
+                  id="materia-media"
+                  value={formData.materia}
+                  onChange={e => handleInputChange('materia', Number(e.target.value))}
+                  className="form-control"
                 >
                   {materias.map((mat, idx) => (
                     <option key={idx} value={idx}>{mat}</option>
                   ))}
                 </select>
               </div>
-              
-              <div>
-                <label className="block text-sm font-medium mb-1">Nome do Aluno:</label>
-                <input 
-                  type="text" 
+            </div>
+            <button onClick={mostrarMediaTurma} className="btn-primary">Ver Média</button>
+          </div>
+        );
+      case 4:
+        return (
+          <div className="form-section active">
+            <h3 className="form-title">👤 Adicionar Aluno</h3>
+            <div className="form-grid">
+              <div className="form-group">
+                <label htmlFor="materia-add">Matéria:</label>
+                <select
+                  id="materia-add"
+                  value={formData.materia}
+                  onChange={e => handleInputChange('materia', Number(e.target.value))}
+                  className="form-control"
+                >
+                  {materias.map((mat, idx) => (
+                    <option key={idx} value={idx}>{mat}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="form-group">
+                <label htmlFor="nomeAluno">Nome do Aluno:</label>
+                <input
+                  id="nomeAluno"
+                  type="text"
                   value={formData.nomeAluno}
-                  onChange={(e) => handleInputChange('nomeAluno', e.target.value)}
-                  className="w-full p-2 border rounded-lg"
+                  onChange={e => handleInputChange('nomeAluno', e.target.value)}
+                  className="form-control"
+                  placeholder="Digite o nome completo"
                 />
               </div>
             </div>
-            
-            <button 
-              onClick={adicionarAluno}
-              className="mt-4 px-6 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors"
-            >
-              Adicionar
-            </button>
+            <button onClick={adicionarAluno} className="btn-primary">Adicionar Aluno</button>
           </div>
-        )}
-
-        {/* Opção 5: Remover Aluno */}
-        {opcaoAtiva === 5 && (
-          <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-            <h3 className="text-lg font-semibold mb-4">Remover Aluno</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium mb-1">Matéria:</label>
-                <select 
-                  value={formData.materia} 
-                  onChange={(e) => handleInputChange('materia', parseInt(e.target.value))}
-                  className="w-full p-2 border rounded-lg"
+        );
+      case 5:
+        return (
+          <div className="form-section active">
+            <h3 className="form-title">❌ Remover Aluno</h3>
+            <div className="form-grid">
+              <div className="form-group">
+                <label htmlFor="materia-remover">Matéria:</label>
+                <select
+                  id="materia-remover"
+                  value={formData.materia}
+                  onChange={e => handleInputChange('materia', Number(e.target.value))}
+                  className="form-control"
                 >
                   {materias.map((mat, idx) => (
                     <option key={idx} value={idx}>{mat}</option>
                   ))}
                 </select>
               </div>
-              
-              <div>
-                <label className="block text-sm font-medium mb-1">Aluno:</label>
-                <select 
-                  value={formData.aluno} 
-                  onChange={(e) => handleInputChange('aluno', parseInt(e.target.value))}
-                  className="w-full p-2 border rounded-lg"
+              <div className="form-group">
+                <label htmlFor="aluno-remover">Aluno:</label>
+                <select
+                  id="aluno-remover"
+                  value={formData.alunoIndex}
+                  onChange={e => handleInputChange('alunoIndex', Number(e.target.value))}
+                  className="form-control"
                 >
-                  {getAlunosValidos(formData.materia).map(({ nome, index }) => (
-                    <option key={index} value={index}>{index} - {nome}</option>
+                  {getAlunosOptions(formData.materia).map(option => (
+                    <option key={option.value} value={option.value}>{option.label}</option>
                   ))}
                 </select>
               </div>
             </div>
-            
-            <button 
-              onClick={removerAluno}
-              className="mt-4 px-6 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors"
-            >
-              Remover
-            </button>
+            <button onClick={removerAluno} className="btn-primary btn-danger">Remover Aluno</button>
           </div>
-        )}
-
-        {/* Opção 6: Ver Vagas */}
-        {opcaoAtiva === 6 && (
-          <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-            <h3 className="text-lg font-semibold mb-4">Vagas Disponíveis</h3>
-            <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">Matéria:</label>
-              <select 
-                value={formData.materia} 
-                onChange={(e) => handleInputChange('materia', parseInt(e.target.value))}
-                className="w-full p-2 border rounded-lg max-w-md"
-              >
-                {materias.map((mat, idx) => (
-                  <option key={idx} value={idx}>{mat}</option>
-                ))}
-              </select>
+        );
+      case 6:
+        return (
+          <div className="form-section active">
+            <h3 className="form-title">📋 Ver Vagas Disponíveis</h3>
+            <div className="form-grid">
+              <div className="form-group">
+                <label htmlFor="materia-vagas">Matéria:</label>
+                <select
+                  id="materia-vagas"
+                  value={formData.materia}
+                  onChange={e => handleInputChange('materia', Number(e.target.value))}
+                  className="form-control"
+                >
+                  {materias.map((mat, idx) => (
+                    <option key={idx} value={idx}>{mat}</option>
+                  ))}
+                </select>
+              </div>
             </div>
-            
-            <button 
-              onClick={mostrarVagas}
-              className="px-6 py-2 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg transition-colors"
-            >
-              Ver Vagas
-            </button>
+            <button onClick={mostrarVagas} className="btn-primary">Ver Vagas</button>
           </div>
-        )}
+        );
+      default:
+        return null;
+    }
+  };
 
-        {/* Área de Output */}
-        {output && (
-          <div className="mt-6 p-4 bg-gray-100 rounded-lg">
-            <h4 className="font-semibold text-gray-700 mb-2">Resultado:</h4>
-            <pre className="whitespace-pre-wrap text-sm text-gray-800">{output}</pre>
+  return (
+    <div className="App">
+      {/* Header */}
+      <header className="header">
+        <div className="header-container">
+          <div className="logo-container">
+            <img className="senai" src="../imagem/senai-logo2.png" ></img>
           </div>
-        )}
-      </div>
+          <div className="header-content">
+            <p className="subtitle">SENAI - Serviço Nacional de Aprendizagem Industrial</p>
+          </div>
+        </div>
+      </header>
+      {/* Main Content */}
+      <main className="main-container">
+        <div className="system-card">
+          <div className="card-header">
+            <h2>Sistema de Notas e Alunos</h2>
+            <p>Gerencie turmas, alunos e avaliações de forma integrada</p>
+          </div>
+          {/* Menu Principal */}
+          <section className="menu-section">
+            <h3 className="section-title">Menu Principal</h3>
+            <div className="menu-grid">
+              <button className={`menu-btn ${opcaoAtiva === 1 ? 'active' : ''}`}
+                onClick={() => { setOpcaoAtiva(1); setOutput(''); clearForm(); }}>
+                <div className="btn-icon">📝</div>
+                <div className="btn-content">
+                  <span className="btn-title">Inserir Notas</span>
+                  <span className="btn-desc">Lançar notas dos alunos</span>
+                </div>
+              </button>
+              <button className={`menu-btn ${opcaoAtiva === 2 ? 'active' : ''}`}
+                onClick={() => { setOpcaoAtiva(2); setOutput(''); clearForm(); }}>
+                <div className="btn-icon">📊</div>
+                <div className="btn-content">
+                  <span className="btn-title">Boletim</span>
+                  <span className="btn-desc">Imprimir boletim individual</span>
+                </div>
+              </button>
+              <button className={`menu-btn ${opcaoAtiva === 3 ? 'active' : ''}`}
+                onClick={() => { setOpcaoAtiva(3); setOutput(''); clearForm(); }}>
+                <div className="btn-icon">📈</div>
+                <div className="btn-content">
+                  <span className="btn-title">Média da Turma</span>
+                  <span className="btn-desc">Ver desempenho geral</span>
+                </div>
+              </button>
+              <button className={`menu-btn ${opcaoAtiva === 4 ? 'active' : ''}`}
+                onClick={() => { setOpcaoAtiva(4); setOutput(''); clearForm(); }}>
+                <div className="btn-icon">👤</div>
+                <div className="btn-content">
+                  <span className="btn-title">Adicionar Aluno</span>
+                  <span className="btn-desc">Matricular novo aluno</span>
+                </div>
+              </button>
+              <button className={`menu-btn ${opcaoAtiva === 5 ? 'active' : ''}`}
+                onClick={() => { setOpcaoAtiva(5); setOutput(''); clearForm(); }}>
+                <div className="btn-icon">❌</div>
+                <div className="btn-content">
+                  <span className="btn-title">Remover Aluno</span>
+                  <span className="btn-desc">Cancelar matrícula</span>
+                </div>
+              </button>
+              <button className={`menu-btn ${opcaoAtiva === 6 ? 'active' : ''}`}
+                onClick={() => { setOpcaoAtiva(6); setOutput(''); clearForm(); }}>
+                <div className="btn-icon">📋</div>
+                <div className="btn-content">
+                  <span className="btn-title">Ver Vagas</span>
+                  <span className="btn-desc">Consultar disponibilidade</span>
+                </div>
+              </button>
+            </div>
+          </section>
+          {/* Formulários */}
+          <div className="form-container">
+            {renderForm()}
+          </div>
+          {/* Output Area */}
+          <div className={`output-area ${output ? 'has-content' : ''}`}>
+            {output && <pre>{output}</pre>}
+          </div>
+        </div>
+      </main>
     </div>
   );
 };
 
-export default SistemaEscolar;
+export default App;
