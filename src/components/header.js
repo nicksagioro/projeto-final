@@ -1,14 +1,24 @@
- return (
-    <div className="App">
-      <header className="header">
-        <div className="header-container">
-          <div className="logo-container">
-            <img className="senai" src="../imagem/senai-logo.png" ></img>
-          </div>
-          <div className="header-content">
-            <p className="subtitle">SENAI - Serviço Nacional de Aprendizagem Industrial</p>
-          </div>
+import React from 'react';
+import Image from 'next/image';
+import styles from '../app/page.module.css';
+
+function Header() {
+  return (
+    <header className={styles.header}>
+      <div className={styles['header-container']}>
+        <Image
+          className={styles.senai}
+          src="/imagem/senai-logo.png"
+          alt="Logo SENAI"
+          width={120}
+          height={60}
+        />
+        <div className={styles['header-content']}>
+          <p className={styles.subtitle}>SENAI - Serviço Nacional de Aprendizagem Industrial</p>
         </div>
-      </header>
-    </div>
-    );
+      </div>
+    </header>
+  );
+}
+
+export default Header;

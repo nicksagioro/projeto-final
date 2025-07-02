@@ -1,8 +1,17 @@
-<main className="main-container">
-  <div className="system-card">
-    <div className="card-header">
-      <h2>Sistema de Notas e Alunos</h2>
-      <p>Gerencie turmas, alunos e avaliações de forma integrada</p>
-    </div>
-  </div>
-</main>
+import React from 'react';
+import styles from '../app/page.module.css';
+
+function MainContent() {
+  return (
+    <main className={styles['main-container']}>
+      <div className={styles['system-card']}>
+        <div className={styles['card-header']}>
+          <h2>Sistema de Notas e Alunos</h2>
+          <p>Gerencie turmas, alunos e avaliações de forma integrada</p>
+        </div>
+      </div>
+    </main>
+  );
+}
+
+export default MainContent;

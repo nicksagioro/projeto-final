@@ -1,73 +1,17 @@
 import React, { useState } from 'react';
-import './page.module.css';
+import styles from '../app/page.module.css';
+import Header from './header';
+import Menu from './menu';
+import MainContent from './mainContent';
+import Formulario from './formulario';
+import OutputArea from './outputArea';
+import NotaAluno from './notaAluno';
+import MediaTurma from './mediaTurma';
+import AdicionarAluno from './adicionarAluno';
+import RemoverAluno from './removerAluno';
+import MostrarVagas from './mostrarVagas';
+import Client from './client';
 
-function Client() {
-return ( 
-  <client.js/>
-);
-}
-
-function Boletim() {
-return (
-  <boletim.js/>
-);
-}
-function AdicionarAluno() {
-return (
-  <adicionarAluno.js/>
-);
-}
-
-function RemoverAluno() {
-return (
-  <removerAluno.js/>
-);
-}
-
-function MostrarVagas() {
-  return (
-    <mostrarVagas.js/>
-  );
-}
-
-function NotaAluno() {
-  return (
-    <notaAluno.js/>
-  );
-}
-
-function MédiaTurma() {
-  return (
-    <mediaTurma.js/>
-  );
-}
-
-function Header() {
-  return (    
-    <header.js/>
-  );  
-
-}
-function Menu() {
-  return (
-    <menu.js/>
-  );
-}
-function MainContent() {
-  return (
-    <mainContent.js/>
-  );
-}
-function Formulario() {
-  return (
-    <formulario.js/>
-  );
-}
-function OutputArea() {
-  return (
-    <outputArea.js/>
-  );
-}
 function App() {
   const [opcaoAtiva, setOpcaoAtiva] = useState(1);
   const [output, setOutput] = useState('');
@@ -90,12 +34,23 @@ function App() {
   };
 
   return (
-    <div className="App">
+    <div className={styles.App}>
       <Header />
-      <Menu opcaoAtiva={opcaoAtiva} setOpcaoAtiva={setOpcaoAtiva} />
+      <Menu
+        opcaoAtiva={opcaoAtiva}
+        setOpcaoAtiva={setOpcaoAtiva}
+        setOutput={setOutput}
+        clearForm={clearForm}
+      />
       <MainContent />
       <Formulario formData={formData} setFormData={setFormData} opcaoAtiva={opcaoAtiva} />
       <OutputArea output={output} />
+      {opcaoAtiva === 1 && <NotaAluno />}
+      {opcaoAtiva === 2 && <MediaTurma />}
+      {opcaoAtiva === 3 && <AdicionarAluno />}
+      {opcaoAtiva === 4 && <RemoverAluno />}
+      {opcaoAtiva === 5 && <MostrarVagas />}
+      <Client />
     </div>
   );
 }

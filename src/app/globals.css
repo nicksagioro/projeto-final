@@ -8,6 +8,9 @@
     --background: #0a0a0a;
     --foreground: #ededed;
   }
+  html {
+    color-scheme: dark;
+  }
 }
 
 html,
@@ -17,11 +20,11 @@ body {
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  
+  min-height: 100vh;
 }
 
 * {
@@ -41,10 +44,4 @@ input, select {
   border: 1px solid #ddd;
   border-radius: 3px;
   box-sizing: border-box;
-}
-
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
 }

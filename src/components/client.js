@@ -1,6 +1,14 @@
 'use client';
 import React, { useState } from 'react';
-import './components/page.module.css'; 
+import styles from '../app/page.module.css';
+import Menu from './menu';
+import OutputArea from './outputArea';
+import NotaAluno from './notaAluno';
+import Boletim from './boletim';
+import MediaTurma from './mediaTurma';
+import AdicionarAluno from './adicionarAluno';
+import RemoverAluno from './removerAluno';
+import MostrarVagas from './mostrarVagas';
 
 const TOTAL_ALUNOS = 15;
 const TOTAL_MATERIAS = 3;
@@ -122,4 +130,108 @@ const App = () => {
       clearForm();
     }
   };
-}
+
+  return (
+    <div className={styles.App}>
+      <Menu
+        opcaoAtiva={opcaoAtiva}
+        setOpcaoAtiva={setOpcaoAtiva}
+        setOutput={setOutput}
+        clearForm={clearForm}
+      />
+
+      {/* Renderização condicional dos formulários conforme o menu */}
+      {opcaoAtiva === 1 && (
+        <NotaAluno
+          formData={formData}
+          handleInputChange={handleInputChange}
+          materias={materias}
+          getAlunosOptions={getAlunosOptions}
+          mostrarRecuperacao={mostrarRecuperacao}
+          inserirNotas={inserirNotas}
+        />
+      )}
+
+      {opcaoAtiva === 2 && (
+        <Boletim
+          formData={formData}
+          setOutput={setOutput}
+          turmas={turmas}
+          materias={materias}
+          notas={notas}
+          handleInputChange={handleInputChange}
+          getAlunosComNotasOptions={getAlunosComNotasOptions}
+        />
+      )}
+
+      {opcaoAtiva === 3 && (
+        <MediaTurma
+          formData={formData}
+          handleInputChange={handleInputChange}
+          materias={materias}
+          mostrarMediaTurma={() => {
+            const { materia } = formData;
+            const alunosValidos = turmas[materia].filter((nome, idx) => nome !== 'VAGA' && notas.mediaFinal[materia][idx] >= 0);
+            if (alunosValidos.length === 0) {
+              setOutput('Nenhum aluno com notas lançadas nesta turma.');
+              return;
+            }
+            const soma = turmas[materia].reduce((acc, nome, idx) => {
+              if (nome !== 'VAGA' && notas.mediaFinal[materia][idx] >= 0) {
+                return acc + notas.mediaFinal[materia][idx];
+              }
+              return acc;
+            }, 0);
+            const media = soma / alunosValidos.length;
+            setOutput(`Média da turma de ${materias[materia]}: ${media.toFixed(2)}`);
+          }}
+        />
+      )}
+
+      {opcaoAtiva === 4 && (
+        <AdicionarAluno
+          turmas={turmas}
+          setTurmas={setTurmas}
+          setOutput={setOutput}
+          clearForm={clearForm}
+          formData={formData}
+          handleInputChange={handleInputChange}
+          materias={materias}
+          TOTAL_ALUNOS={TOTAL_ALUNOS}
+        />
+      )}
+
+      {opcaoAtiva === 5 && (
+        <RemoverAluno
+          formData={formData}
+          turmas={turmas}
+          notas={notas}
+          setTurmas={setTurmas}
+          setNotas={setNotas}
+          setOutput={setOutput}
+          handleInputChange={handleInputChange}
+          materias={materias}
+          getAlunosOptions={getAlunosOptions}
+        />
+      )}
+
+      {opcaoAtiva === 6 && (
+        <MostrarVagas
+          formData={formData}
+          turmas={turmas}
+          materias={materias}
+          TOTAL_ALUNOS={TOTAL_ALUNOS}
+          setOutput={() => {
+            const { materia } = formData;
+            const vagas = turmas[materia].filter(nome => nome === 'VAGA').length;
+            setOutput(`Vagas disponíveis na turma de ${materias[materia]}: ${vagas}/${TOTAL_ALUNOS}`);
+          }}
+        />
+      )}
+
+      <OutputArea output={output} />
+    </div>
+  );
+};
+
+export default App;
