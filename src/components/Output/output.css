@@ -1,0 +1,25 @@
+btn-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 2;
+  }
+  
+  .btn-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    position: relative;
+    z-index: 2;
+  }
+  
+  .btn-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+  
+  .btn-desc {
+    font-size: 0.9rem;
+    opacity: 0.7;
+  }
+  

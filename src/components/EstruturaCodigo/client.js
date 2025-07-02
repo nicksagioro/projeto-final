@@ -1,14 +1,14 @@
 'use client';
 import React, { useState } from 'react';
 import styles from '../app/page.module.css';
-import Menu from './menu';
-import OutputArea from './outputArea';
-import NotaAluno from './notaAluno';
-import Boletim from './boletim';
-import MediaTurma from './mediaTurma';
-import AdicionarAluno from './adicionarAluno';
-import RemoverAluno from './removerAluno';
-import MostrarVagas from './mostrarVagas';
+import Menu from '../Menu/menu';
+import OutputArea from '../Output/outputArea';
+import NotaAluno from '../Nota Aluno/notaAluno';
+import Boletim from '../Boletim/boletim';
+import MediaTurma from '../Media Turma/mediaTurma';
+import AdicionarAluno from '../Adicionar Aluno/adicionarAluno';
+import RemoverAluno from '../Remover Aluno/removerAluno';
+import MostrarVagas from '../Mostrar Vagas/mostrarVagas';
 
 const TOTAL_ALUNOS = 15;
 const TOTAL_MATERIAS = 3;
