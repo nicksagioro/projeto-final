@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './page.module.css';
+import './app/page.module.css';
 
 function Client() {
 return ( 
