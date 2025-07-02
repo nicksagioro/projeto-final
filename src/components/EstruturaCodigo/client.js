@@ -1,13 +1,13 @@
 'use client';
 import React, { useState } from 'react';
-import styles from '../app/page.module.css';
+import styles from '../app/client.module.css';
 import Menu from '../Menu/menu';
 import OutputArea from '../Output/outputArea';
-import NotaAluno from '../Nota Aluno/notaAluno';
+import NotaAluno from '../NotaAluno/notaAluno';
 import Boletim from '../Boletim/boletim';
-import MediaTurma from '../Media Turma/mediaTurma';
-import AdicionarAluno from '../Adicionar Aluno/adicionarAluno';
-import RemoverAluno from '../Remover Aluno/removerAluno';
+import MediaTurma from '../MediaTurma/mediaTurma';
+import AdicionarAluno from '../AdicionarAluno/adicionarAluno';
+import RemoverAluno from '../RemoverAluno/removerAluno';
 import MostrarVagas from '../Mostrar Vagas/mostrarVagas';
 
 const TOTAL_ALUNOS = 15;

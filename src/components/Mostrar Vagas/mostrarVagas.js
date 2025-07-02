@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../app/page.module.css';
+import styles from './mostrarVagas.module.css';
 
 function MostrarVagas({ formData, turmas, materias, TOTAL_ALUNOS, setOutput }) {
   const handleMostrarVagas = () => {
