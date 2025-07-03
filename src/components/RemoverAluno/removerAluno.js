@@ -1,60 +1,29 @@
-import React from 'react';
+'use client';
+import React, { useState } from 'react';
 import styles from './removerAluno.module.css';
 
-function RemoverAluno({
-  formData,
-  turmas,
-  notas,
-  setTurmas,
-  setNotas,
-  setOutput,
-  handleInputChange,
-  materias,
-  getAlunosOptions
-}) {
-  const removerAluno = () => {
-    const { materia, alunoIndex } = formData;
-    if (turmas[materia][alunoIndex] === 'VAGA') {
-      setOutput('Aluno inválido!');
-      return;
-    }
-    const nomeAluno = turmas[materia][alunoIndex];
-    const newTurmas = {
-      ...turmas,
-      [materia]: [...turmas[materia]]
-    };
-    newTurmas[materia][alunoIndex] = 'VAGA';
+export default function RemoverAluno({ materias, turmas, removerAluno }) {
+  const [materiaIndex, setMateriaIndex] = useState(0);
+  const [alunoIndex, setAlunoIndex] = useState(0);
 
-    // Cópia profunda dos arrays internos
-    const newNotas = {
-      ...notas,
-      nota1: notas.nota1.map(arr => [...arr]),
-      nota2: notas.nota2.map(arr => [...arr]),
-      recuperacao: notas.recuperacao.map(arr => [...arr]),
-      mediaInicial: notas.mediaInicial.map(arr => [...arr]),
-      mediaFinal: notas.mediaFinal.map(arr => [...arr]),
-    };
-    newNotas.nota1[materia][alunoIndex] = -1;
-    newNotas.nota2[materia][alunoIndex] = -1;
-    newNotas.recuperacao[materia][alunoIndex] = -1;
-    newNotas.mediaInicial[materia][alunoIndex] = -1;
-    newNotas.mediaFinal[materia][alunoIndex] = -1;
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!turmas[materiaIndex] || turmas[materiaIndex].length === 0) return;
 
-    setTurmas(newTurmas);
-    setNotas(newNotas);
-    setOutput(`Aluno ${nomeAluno} removido da turma.`);
+    removerAluno(materiaIndex, alunoIndex);
+    setAlunoIndex(0);
   };
 
   return (
-    <div className={styles['form-section'] + ' ' + styles.active}>
-      <h3 className={styles['form-title']}>❌ Remover Aluno</h3>
-      <div className={styles['form-grid']}>
+    <div className={styles['form-section']}>
+      <h3 className={styles['form-title']}>➖ Remover Aluno</h3>
+      <form onSubmit={handleSubmit} className={styles['form-grid']}>
+
         <div className={styles['form-group']}>
-          <label htmlFor="materia-remover">Matéria:</label>
+          <label>Matéria:</label>
           <select
-            id="materia-remover"
-            value={formData.materia}
-            onChange={e => handleInputChange('materia', Number(e.target.value))}
+            value={materiaIndex}
+            onChange={e => setMateriaIndex(Number(e.target.value))}
             className={styles['form-control']}
           >
             {materias.map((mat, idx) => (
@@ -62,23 +31,25 @@ function RemoverAluno({
             ))}
           </select>
         </div>
+
         <div className={styles['form-group']}>
-          <label htmlFor="aluno-remover">Aluno:</label>
+          <label>Aluno:</label>
           <select
-            id="aluno-remover"
-            value={formData.alunoIndex}
-            onChange={e => handleInputChange('alunoIndex', Number(e.target.value))}
+            value={alunoIndex}
+            onChange={e => setAlunoIndex(Number(e.target.value))}
             className={styles['form-control']}
           >
-            {getAlunosOptions(formData.materia).map(option => (
-              <option key={option.value} value={option.value}>{option.label}</option>
+            {turmas[materiaIndex]?.map((aluno, idx) => (
+              <option key={idx} value={idx}>{aluno}</option>
             ))}
           </select>
         </div>
-      </div>
-      <button onClick={removerAluno} className={`${styles['btn-primary']} ${styles['btn-danger']}`}>Remover Aluno</button>
+
+        <button type="submit" className={styles['btn-primary']}>
+          Remover
+        </button>
+
+      </form>
     </div>
   );
 }
-
-export default RemoverAluno;

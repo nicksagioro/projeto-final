@@ -1,109 +1,80 @@
-import React, { useState } from 'react';
+'use client';
+import React from 'react';
 import styles from './notaAluno.module.css';
 
-const materias = ["Matemática", "Português", "Ciências"];
+export default function NotaAluno({ formData, turmas, notas, setNotas, handleInputChange }) {
+  const handleNotaChange = (field, value) => {
+    const { materia, alunoIndex } = formData;
+    const novaNota = Number(value);
 
-function NotaAluno({
-  getAlunosOptions,
-  mostrarRecuperacao,
-  inserirNotas
-}) {
-  const [formData, setFormData] = useState({
-    materia: 0,
-    alunoIndex: 0,
-    nota1: '',
-    nota2: '',
-    recuperacao: ''
-  });
-
-  const handleInputChange = (field, value) => {
-    setFormData(prevState => ({
-      ...prevState,
-      [field]: value
+    setNotas(prev => ({
+      ...prev,
+      [field]: prev[field].map((arr, idx) =>
+        idx === materia
+          ? arr.map((n, i) => (i === alunoIndex ? novaNota : n))
+          : arr
+      ),
     }));
   };
 
-  const safeFormData = formData || {};
-
-  const alunosOptions = typeof getAlunosOptions === 'function'
-    ? getAlunosOptions(safeFormData.materia)
-    : [];
-
   return (
-    <div className={styles['form-section'] + ' ' + styles.active}>
-      <h3 className={styles['form-title']}>📝 Inserir Notas de Aluno</h3>
+    <div className={styles['form-section']}>
+      <h3 className={styles['form-title']}>📝 Lançar Nota</h3>
       <div className={styles['form-grid']}>
+
         <div className={styles['form-group']}>
-          <label htmlFor="materia-nota">Matéria:</label>
+          <label>Matéria:</label>
           <select
-            id="materia-nota"
-            value={safeFormData.materia}
+            value={formData.materia}
             onChange={e => handleInputChange('materia', Number(e.target.value))}
             className={styles['form-control']}
           >
-            {Array.isArray(materias) && materias.map((mat, idx) => (
-              <option key={idx} value={idx}>{mat}</option>
+            {Object.keys(turmas).map((idx) => (
+              <option key={idx} value={idx}>Matéria {Number(idx) + 1}</option>
             ))}
           </select>
         </div>
+
         <div className={styles['form-group']}>
-          <label htmlFor="aluno-nota">Aluno:</label>
+          <label>Aluno:</label>
           <select
-            id="aluno-nota"
-            value={safeFormData.alunoIndex}
+            value={formData.alunoIndex}
             onChange={e => handleInputChange('alunoIndex', Number(e.target.value))}
             className={styles['form-control']}
           >
-            {alunosOptions.map(option => (
-              <option key={option.value} value={option.value}>{option.label}</option>
+            {turmas[formData.materia]?.map((aluno, idx) => (
+              <option key={idx} value={idx}>{aluno}</option>
             ))}
           </select>
         </div>
+
         <div className={styles['form-group']}>
-          <label htmlFor="nota1">Nota 1:</label>
+          <label>Nota 1:</label>
           <input
-            id="nota1"
             type="number"
-            value={safeFormData.nota1}
-            onChange={e => handleInputChange('nota1', e.target.value)}
-            className={styles['form-control']}
             min="0"
             max="10"
             step="0.1"
+            value={notas.nota1[formData.materia][formData.alunoIndex]}
+            onChange={e => handleNotaChange('nota1', e.target.value)}
+            className={styles['form-control']}
           />
         </div>
+
         <div className={styles['form-group']}>
-          <label htmlFor="nota2">Nota 2:</label>
+          <label>Nota 2:</label>
           <input
-            id="nota2"
             type="number"
-            value={safeFormData.nota2}
-            onChange={e => handleInputChange('nota2', e.target.value)}
-            className={styles['form-control']}
             min="0"
             max="10"
             step="0.1"
+            value={notas.nota2[formData.materia][formData.alunoIndex]}
+            onChange={e => handleNotaChange('nota2', e.target.value)}
+            className={styles['form-control']}
           />
         </div>
-        {mostrarRecuperacao && (
-          <div className={styles['form-group']}>
-            <label htmlFor="recuperacao">Nota de Recuperação:</label>
-            <input
-              id="recuperacao"
-              type="number"
-              value={safeFormData.recuperacao}
-              onChange={e => handleInputChange('recuperacao', e.target.value)}
-              className={styles['form-control']}
-              min="0"
-              max="10"
-              step="0.1"
-            />
-          </div>
-        )}
+
       </div>
-      <button onClick={inserirNotas} className={styles['btn-primary']}>Inserir Notas</button>
     </div>
   );
 }
-
-export default NotaAluno;

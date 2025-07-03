@@ -1,28 +1,32 @@
+'use client';
 import React from 'react';
 import styles from './mediaTurma.module.css';
 
-const materias = ['Matemática', 'Português', 'Ciências', 'História', 'Geografia'];
+export default function MediaTurma({ turmas, notas }) {
+  const calcularMediaTurma = (materiaIndex) => {
+    const alunos = turmas[materiaIndex];
+    if (!alunos || alunos.length === 0) return 0;
 
-function MediaTurma({ formData, handleInputChange }) {
+    let somaMedias = 0;
 
-return (
-  <div>
-    <label htmlFor="materia-media">Selecione a matéria:</label>
-    <select
-      id="materia-media"
-      value={formData?.materia || 0}
-      onChange={e => handleInputChange('materia', Number(e.target.value))}
-      className="form-control"
-    >
-      <option value={0}>Selecione uma matéria</option>
-      {materias.map((materia, index) => (
-        <option key={index + 1} value={index + 1}>
-          {materia}
-        </option>
-      ))}
-    </select>
-  </div>
-);
-};
+    alunos.forEach((_, idx) => {
+      const media = (notas.nota1[materiaIndex][idx] + notas.nota2[materiaIndex][idx]) / 2;
+      somaMedias += media;
+    });
 
-export default MediaTurma;
+    return (somaMedias / alunos.length).toFixed(2);
+  };
+
+  return (
+    <div className={styles['form-section']}>
+      <h3 className={styles['form-title']}>📈 Média das Turmas</h3>
+      <div className={styles['form-grid']}>
+        {Object.keys(turmas).map((idx) => (
+          <div key={idx} className={styles['form-group']}>
+            <strong>Matéria {Number(idx) + 1}:</strong> {calcularMediaTurma(Number(idx))}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
