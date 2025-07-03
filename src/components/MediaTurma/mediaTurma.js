@@ -1,28 +1,28 @@
 import React from 'react';
-import styles from './mediaTurma.module.css'
+import styles from './mediaTurma.module.css';
 
-function MediaTurma({ formData, handleInputChange, materias, mostrarMediaTurma }) {
-  return (
-    <div className={styles['form-section'] + ' ' + styles.active}>
-      <h3 className={styles['form-title']}>📈 Média da Turma</h3>
-      <div className={styles['form-grid']}>
-        <div className={styles['form-group']}>
-          <label htmlFor="materia-media">Matéria:</label>
-          <select
-            id="materia-media"
-            value={formData.materia}
-            onChange={e => handleInputChange('materia', Number(e.target.value))}
-            className={styles['form-control']}
-          >
-            {materias.map((mat, idx) => (
-              <option key={idx} value={idx}>{mat}</option>
-            ))}
-          </select>
-        </div>
-      </div>
-      <button onClick={mostrarMediaTurma} className={styles['btn-primary']}>Ver Média</button>
-    </div>
-  );
-}
+const materias = ['Matemática', 'Português', 'Ciências', 'História', 'Geografia'];
+
+function MediaTurma({ formData, handleInputChange }) {
+
+return (
+  <div>
+    <label htmlFor="materia-media">Selecione a matéria:</label>
+    <select
+      id="materia-media"
+      value={formData?.materia || 0}
+      onChange={e => handleInputChange('materia', Number(e.target.value))}
+      className="form-control"
+    >
+      <option value={0}>Selecione uma matéria</option>
+      {materias.map((materia, index) => (
+        <option key={index + 1} value={index + 1}>
+          {materia}
+        </option>
+      ))}
+    </select>
+  </div>
+);
+};
 
 export default MediaTurma;
