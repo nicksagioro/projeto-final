@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../app/page.module.css';
+import './sistemaNotas.module.css';
 
 
 function Client() {

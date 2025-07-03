@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from '../app/page.module.css';
+import styles from './notaAluno.module.css';
 
 const materias = ["Matemática", "Português", "Ciências"];
 

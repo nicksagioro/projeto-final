@@ -1,4 +1,4 @@
-import styles from '../app/page.module.css';
+import styles from './vagasMaterias.module.css';
 
 function VagasMaterias({ telaAtual, formData, handleInputChange, materias, mostrarVagas }) {
   switch (telaAtual) {
