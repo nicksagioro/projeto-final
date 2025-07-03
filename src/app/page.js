@@ -121,33 +121,6 @@ export default function Home() {
       <Header title="Sistema de Notas" />
       <Menu/>
       <MainContent />
-      <NotaAluno
-        formData={formData}
-        turmas={turmas}
-        notas={notas}
-        setNotas={setNotas}
-        handleInputChange={handleInputChange}
-      />
-      <MediaTurma turmas={turmas} notas={notas} />
-      <Boletim
-        formData={formData}
-        setOutput={setOutput}
-        turmas={turmas}
-        materias={materias}
-        notas={notas}
-        handleInputChange={handleInputChange}
-        getAlunosComNotasOptions={getAlunosComNotasOptions}
-      />
-      <AdicionarAluno
-        materias={materias}
-        adicionarAluno={adicionarAluno}
-      />
-      <RemoverAluno
-        materias={materias}
-        turmas={turmas}
-        removerAluno={removerAluno}
-      />
-      <MostrarVagas turmas={turmas} />
       <Formulario
         formData={formData}
         handleInputChange={handleInputChange}
