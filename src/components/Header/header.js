@@ -1,20 +1,19 @@
-import React from 'react';
-import Image from 'next/image';
-import styles from './header.module.css';
+import React from "react";
+import styles from "./header.module.css";
 
 function Header() {
   return (
     <header className={styles.header}>
-      <div className={styles['header-container']}>
-        <Image
+      <div className={styles["header-container"]}>
+        <img
           className={styles.senai}
-          src="/imagem/senai-logo.png"
-          alt="Logo SENAI"
-          width={120}
-          height={60}
+          src={"/imagem/senai-logo2.png"}
+          alt="Logo do SENAI"
         />
-        <div className={styles['header-content']}>
-          <p className={styles.subtitle}>SENAI - Serviço Nacional de Aprendizagem Industrial</p>
+        <div className={styles["header-content"]}>
+          <p className={styles.subtitle}>
+            SENAI - Serviço Nacional de Aprendizagem Industrial
+          </p>
         </div>
       </div>
     </header>
