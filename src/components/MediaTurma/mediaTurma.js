@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../app/page.module.css';
+import styles from './mediaTurma.module.css'
 
 function MediaTurma({ formData, handleInputChange, materias, mostrarMediaTurma }) {
   return (

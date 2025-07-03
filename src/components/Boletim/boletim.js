@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './boletim.module.css';
+import styles from '../components/boletim.module.css';
 
 function Boletim({
   formData,

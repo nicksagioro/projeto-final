@@ -1,5 +1,15 @@
-
-
+@import '../components/adicionarAluno.module.css';
+@import './components/boletim.module.css';
+@import './components/client.module.css';
+@import 'formulario.module.css';
+@import 'header.module.css';
+@import 'mainContent.module.css';
+@import 'mediaTurma.module.css';
+@import 'menu.module.css';
+@import 'mostrarVagas.module.css';
+@import 'output.module.css';
+@import 'removerAluno.module.css';
+@import 'vagasMaterias.module.css';
 
 
 
