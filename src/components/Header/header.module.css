@@ -1,38 +1,38 @@
 .header {
   background-color: #005CAA; /* SENAI blue */
-color: white;
-padding: 2rem 0;
-box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  color: white;
+  padding: 2rem 0;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 
 .header-container {
-max-width: 1200px;
-margin: 0 auto;
-display: flex;
-align-items: center;
-gap: 2rem;
-padding: 0 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  padding: 0 2rem;
 }
 
 .header-content {
-flex: 1;
+  flex: 1;
 }
 
 .main-title {
-font-size: 2.5rem;
-font-weight: 700;
-margin-bottom: 0.5rem;
-text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .subtitle {
-font-size: 1.2rem;
-opacity: 0.9;
-font-weight: 300;
-letter-spacing: 0.5px;
+  font-size: 1.2rem;
+  opacity: 0.9;
+  font-weight: 300;
+  letter-spacing: 0.5px;
 }
 
 .senai {
-height: 60px;
-width: auto;
+  height: 60px;
+  width: auto;
 }

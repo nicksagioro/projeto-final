@@ -1,7 +1,7 @@
 'use client';
 
 import SistemaNotas from '../components/SistemaNotas/SistemaNotas';
-import '../components/SistemaNotas/sistemaNotas.module.css';
+import '../components/SistemaNotas/SistemaNotas.module.css';
 
 export default function Page() {
   return (

@@ -1,0 +1,48 @@
+.btn-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 2;
+  }
+  
+  .btn-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    position: relative;
+    z-index: 2;
+  }
+  
+  .btn-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+  
+  .btn-desc {
+    font-size: 0.9rem;
+    opacity: 0.7;
+  }
+  .menu-section {
+    padding: 3rem;
+  }
+  
+  .section-title {
+    font-size: 1.5rem;
+    color: #667eea;
+    margin-bottom: 2rem;
+    text-align: center;
+    font-weight: 600;
+    position: relative;
+  }
+  
+  .section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 2px;
+  }

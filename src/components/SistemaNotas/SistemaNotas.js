@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
-import Menu from '../Menu/menu';
-import NotaAluno from '../NotaAluno/notaAluno';
-import Boletim from '../Boletim/boletim';
-import MediaTurma from '../MediaTurma/mediaTurma';
-import AdicionarAluno from '../AdicionarAluno/adicionarAluno';
-import RemoverAluno from '../RemoverAluno/removerAluno';
-import MostrarVagas from '../Mostrar Vagas/mostrarVagas';
-import OutputArea from '../Output/outputArea';
+import Menu from '../Menu/menu.js';
+import NotaAluno from '../NotaAluno/notaAluno.js';
+import Boletim from '../Boletim/boletim.js';
+import MediaTurma from '../MediaTurma/mediaTurma.js';
+import AdicionarAluno from '../AdicionarAluno/adicionarAluno.js';
+import RemoverAluno from '../RemoverAluno/removerAluno.js';
+import MostrarVagas from '../MostrarVagas/mostrarVagas.js';
+import OutputArea from '../Output/outputArea.js';
+import Header from '../Header/header.js';
+import Footer from '../footer/footer.js';
 
-// Styles import './';
-import styles from './sistemaNotas.module.css';
+// Styles
+import styles from './SistemaNotas.module.css';
 
 // Constantes e variáveis
-
 const TOTAL_ALUNOS = 15;
 const TOTAL_MATERIAS = 3;
 const materias = ["Matemática", "Português", "Ciências"];
@@ -140,105 +141,5 @@ const App = () => {
     setOutput(`Vagas disponíveis na turma de ${materias[materia]}: ${vagas}/${TOTAL_ALUNOS}`);
   };
 
-  return (
-    <div className={styles.App}>
-      <Menu
-        opcaoAtiva={opcaoAtiva}
-        setOpcaoAtiva={setOpcaoAtiva}
-        setOutput={setOutput}
-        clearForm={clearForm}
-      />
-
-      {/* Renderização condicional dos formulários conforme o menu */}
-      {opcaoAtiva === 1 && (
-        <NotaAluno
-          formData={formData}
-          handleInputChange={handleInputChange}
-          materias={materias}
-          getAlunosOptions={getAlunosOptions}
-          mostrarRecuperacao={mostrarRecuperacao}
-          inserirNotas={inserirNotas}
-        />
-      )}
-
-      {opcaoAtiva === 2 && (
-        <Boletim
-          formData={formData}
-          setOutput={setOutput}
-          turmas={turmas}
-          materias={materias}
-          notas={notas}
-          handleInputChange={handleInputChange}
-          getAlunosComNotasOptions={getAlunosComNotasOptions}
-        />
-      )}
-
-      {opcaoAtiva === 3 && (
-        <MediaTurma
-          formData={formData}
-          handleInputChange={handleInputChange}
-          materias={materias}
-          mostrarMediaTurma={() => {
-            const { materia } = formData;
-            const alunosValidos = turmas[materia].filter((nome, idx) => nome !== 'VAGA' && notas.mediaFinal[materia][idx] >= 0);
-            if (alunosValidos.length === 0) {
-              setOutput('Nenhum aluno com notas lançadas nesta turma.');
-              return;
-            }
-            const soma = turmas[materia].reduce((acc, nome, idx) => {
-              if (nome !== 'VAGA' && notas.mediaFinal[materia][idx] >= 0) {
-                return acc + notas.mediaFinal[materia][idx];
-              }
-              return acc;
-            }, 0);
-            const media = soma / alunosValidos.length;
-            setOutput(`Média da turma de ${materias[materia]}: ${media.toFixed(2)}`);
-          }}
-        />
-      )}
-
-      {opcaoAtiva === 4 && (
-        <AdicionarAluno
-          turmas={turmas}
-          setTurmas={setTurmas}
-          setOutput={setOutput}
-          clearForm={clearForm}
-          formData={formData}
-          handleInputChange={handleInputChange}
-          materias={materias}
-          TOTAL_ALUNOS={TOTAL_ALUNOS}
-        />
-      )}
-
-      {opcaoAtiva === 5 && (
-        <RemoverAluno
-          formData={formData}
-          turmas={turmas}
-          notas={notas}
-          setTurmas={setTurmas}
-          setNotas={setNotas}
-          setOutput={setOutput}
-          handleInputChange={handleInputChange}
-          materias={materias}
-          getAlunosOptions={getAlunosOptions}
-        />
-      )}
-
-     
-    
-      {opcaoAtiva === 6 && (
-        <MostrarVagas
-          formData={formData}
-          turmas={turmas}
-          materias={materias}
-          TOTAL_ALUNOS={TOTAL_ALUNOS}
-          calcularVagas={calcularVagas}
-        />
-      )}
-
-      <OutputArea output={output} />
-    </div>
-  );
-};
-
-export default App;
+;
+}

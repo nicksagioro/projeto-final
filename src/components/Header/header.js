@@ -8,7 +8,7 @@ function Header() {
         <img
           className={styles.senai ? styles.senai : ""}
           src={"/imagem/senai-logo2.png"}
-          alt="senai"
+          alt="Logo do SENAI"
         />
         <div className={styles["header-content"]}>
           <p className={styles.subtitle}>

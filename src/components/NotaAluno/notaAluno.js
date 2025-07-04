@@ -29,9 +29,10 @@ export default function NotaAluno({ formData, turmas, notas, setNotas, handleInp
             onChange={e => handleInputChange('materia', Number(e.target.value))}
             className={styles['form-control']}
           >
-            {Object.keys(turmas).map((idx) => (
+            {turmas && Object.keys(turmas).map((idx) => (
               <option key={idx} value={idx}>Matéria {Number(idx) + 1}</option>
             ))}
+
           </select>
         </div>
 
