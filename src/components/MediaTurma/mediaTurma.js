@@ -5,16 +5,20 @@ import styles from './mediaTurma.module.css';
 export default function MediaTurma({ turmas, notas }) {
   const calcularMediaTurma = (materiaIndex) => {
     const alunos = turmas[materiaIndex];
-    if (!alunos || alunos.length === 0) return 0;
+    if (!alunos || !Array.isArray(alunos) || alunos.length === 0) return 0;
 
     let somaMedias = 0;
 
     alunos.forEach((_, idx) => {
-      const media = (notas.nota1[materiaIndex][idx] + notas.nota2[materiaIndex][idx]) / 2;
-      somaMedias += media;
+      const nota1 = notas?.nota1?.[materiaIndex]?.[idx];
+      const nota2 = notas?.nota2?.[materiaIndex]?.[idx];
+      if (typeof nota1 === 'number' && typeof nota2 === 'number') {
+        const media = (nota1 + nota2) / 2;
+        somaMedias += media;
+      }
     });
 
-    return (somaMedias / alunos.length).toFixed(2);
+    return alunos.length > 0 ? (somaMedias / alunos.length).toFixed(2) : '0.00';
   };
 
   return (

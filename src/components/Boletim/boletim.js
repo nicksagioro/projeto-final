@@ -56,7 +56,7 @@ function Boletim({
           <label htmlFor="aluno-boletim">Aluno:</label>
           <select
             id="aluno-boletim"
-            value={formData?.materia ?? 0}
+            value={formData?.alunoIndex ?? 0}
             onChange={e => handleInputChange('alunoIndex', Number(e.target.value))}
             className={styles['form-control']}
           >

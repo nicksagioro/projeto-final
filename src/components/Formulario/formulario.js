@@ -9,7 +9,7 @@ function Formulario({ formData, handleInputChange, onSubmit }) {
           type="text"
           placeholder="Nome do aluno"
           className={styles['input']}
-          value={formData.nomeAluno}
+          value={formData?.nomeAluno || ''}
           onChange={e => handleInputChange('nomeAluno', e.target.value)}
         />
         {/* Adicione outros campos conforme necessário */}

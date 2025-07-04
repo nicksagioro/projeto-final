@@ -55,7 +55,7 @@ export default function NotaAluno({ formData, turmas, notas, setNotas, handleInp
             min="0"
             max="10"
             step="0.1"
-            value={notas.nota1[formData.materia][formData.alunoIndex]}
+            value={notas.nota1?.[formData.materia]?.[formData.alunoIndex] || ''}
             onChange={e => handleNotaChange('nota1', e.target.value)}
             className={styles['form-control']}
           />
@@ -68,7 +68,7 @@ export default function NotaAluno({ formData, turmas, notas, setNotas, handleInp
             min="0"
             max="10"
             step="0.1"
-            value={notas.nota2[formData.materia][formData.alunoIndex]}
+            value={notas.nota2?.[formData.materia]?.[formData.alunoIndex] || ''}
             onChange={e => handleNotaChange('nota2', e.target.value)}
             className={styles['form-control']}
           />

@@ -1,14 +1,17 @@
-'use client';
 import React, { useState } from 'react';
-import styles from '../app/client.module.css';
 import Menu from '../Menu/menu';
-import OutputArea from '../Output/outputArea';
 import NotaAluno from '../NotaAluno/notaAluno';
 import Boletim from '../Boletim/boletim';
 import MediaTurma from '../MediaTurma/mediaTurma';
 import AdicionarAluno from '../AdicionarAluno/adicionarAluno';
 import RemoverAluno from '../RemoverAluno/removerAluno';
 import MostrarVagas from '../Mostrar Vagas/mostrarVagas';
+import OutputArea from '../Output/outputArea';
+
+// Styles import './';
+import styles from './sistemaNotas.module.css';
+
+// Constantes e variáveis
 
 const TOTAL_ALUNOS = 15;
 const TOTAL_MATERIAS = 3;
@@ -130,6 +133,12 @@ const App = () => {
       clearForm();
     }
   };
+  
+  const calcularVagas = () => {
+    const { materia } = formData;
+    const vagas = turmas[materia].filter(nome => nome === 'VAGA').length;
+    setOutput(`Vagas disponíveis na turma de ${materias[materia]}: ${vagas}/${TOTAL_ALUNOS}`);
+  };
 
   return (
     <div className={styles.App}>
@@ -215,17 +224,15 @@ const App = () => {
         />
       )}
 
+     
+    
       {opcaoAtiva === 6 && (
         <MostrarVagas
           formData={formData}
           turmas={turmas}
           materias={materias}
           TOTAL_ALUNOS={TOTAL_ALUNOS}
-          setOutput={() => {
-            const { materia } = formData;
-            const vagas = turmas[materia].filter(nome => nome === 'VAGA').length;
-            setOutput(`Vagas disponíveis na turma de ${materias[materia]}: ${vagas}/${TOTAL_ALUNOS}`);
-          }}
+          calcularVagas={calcularVagas}
         />
       )}
 

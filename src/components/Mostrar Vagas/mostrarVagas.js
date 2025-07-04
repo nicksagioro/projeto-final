@@ -11,7 +11,7 @@ export default function MostrarVagas({ turmas }) {
       <div className={styles['form-grid']}>
         {Object.keys(turmas).map((idx) => (
           <div key={idx} className={styles['form-group']}>
-            <strong>Matéria {Number(idx) + 1}:</strong> {capacidadeMaxima - turmas[idx].length} vagas disponíveis
+            <strong>Matéria {Number(idx) + 1}:</strong> {capacidadeMaxima - (Array.isArray(turmas[idx]) ? turmas[idx].length : 0)} vagas disponíveis
           </div>
         ))}
       </div>

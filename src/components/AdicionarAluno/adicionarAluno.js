@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import styles from './adicionarAluno.module.css';
 
-export default function AdicionarAluno({ materias, adicionarAluno }) {
+export default function AdicionarAluno({ materias = [], adicionarAluno = () => {} }) {
   const [materiaIndex, setMateriaIndex] = useState(0);
   const [nomeAluno, setNomeAluno] = useState('');
 
