@@ -3,7 +3,7 @@ import React from 'react';
 import styles from './mostrarVagas.module.css';
 
 export default function MostrarVagas({ turmas }) {
-  const capacidadeMaxima = 20; 
+  const capacidadeMaxima = 45; 
   const materias = ['Matemática', 'Português', 'Ciências'];
 
   return (

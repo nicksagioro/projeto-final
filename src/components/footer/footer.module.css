@@ -1,7 +1,39 @@
-.footer{
-    background-color: #f8f9fa;
-    padding: 20px;
-    text-align: center;
-    font-size: 14px;
-    color: #6c757d;
+.footer {
+  background-color: #005CAA;
+  color: #ecf0f1;
+  padding: 20px 0;
+  text-align: center;
+  margin-top:   50px;
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+  border-top: 1px solid #34495e;
+}
+
+.footer p {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .footer {
+    padding: 15px 0;
+  }
+  
+  .footer p {
+    font-size: 12px;
+  }
+}
+
+/* Para garantir que o footer fique na parte inferior da página */
+/* Adicione estas classes ao seu layout principal se necessário */
+.page-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
 }

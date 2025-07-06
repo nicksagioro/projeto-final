@@ -1,11 +1,11 @@
 // Configuração dos botões do menu
 export const menuOptions = [
-  { id: 1, icon: '📝', title: 'Inserir Notas', desc: 'Inserir notas dos alunos' },
-  { id: 2, icon: '📊', title: 'Boletim', desc: 'Imprimir boletim individual' },
-  { id: 3, icon: '📈', title: 'Média da Turma', desc: 'Ver desempenho geral' },
-  { id: 4, icon: '👤', title: 'Adicionar Aluno', desc: 'Matricular novo aluno' },
-  { id: 5, icon: '❌', title: 'Remover Aluno', desc: 'Cancelar matrícula' },
-  { id: 6, icon: '📋', title: 'Ver Vagas', desc: 'Consultar disponibilidade' }
+  { id: 1, icon: '📝', title: 'Inserir notas dos alunos' },
+  { id: 2, icon: '📊', title: 'Boletim' },
+  { id: 3, icon: '📈', title: 'Média da Turma' },
+  { id: 4, icon: '👤', title: 'Adicionar Aluno'},
+  { id: 5, icon: '❌', title: 'Remover Aluno' },
+  { id: 6, icon: '📋', title: 'Ver Vagas' }
 ];
 
 // Função para renderizar o conteúdo baseado na opção ativa

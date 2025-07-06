@@ -1,14 +1,13 @@
-<div className="Footer">
-    <footer className="footer">
-        <div className="footer-content">
-        <p>&copy; 2023 Your Company Name. All rights reserved.</p>
-        <nav className="footer-nav">
-            <ul>
-            <li><a href="/privacy-policy">Privacy Policy</a></li>
-            <li><a href="/terms-of-service">Terms of Service</a></li>
-            <li><a href="/contact-us">Contact Us</a></li>
-            </ul>
-        </nav>
-        </div>
+import React from 'react';
+import styles from './footer.module.css'; 
+
+const Footer = () => {
+  return (
+    <footer className={styles.footer}>
+      <p>&copy; 2025 Sistema de Notas</p>
+      <p>Desenvolvido por [Nicolas Sagioro e Brian Fontes]</p>
     </footer>
-</div>
+  );
+};
+
+export default Footer;

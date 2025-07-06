@@ -8,6 +8,7 @@ import RemoverAluno from '../RemoverAluno/removerAluno.js';
 import MostrarVagas from '../MostrarVagas/mostrarVagas.js';
 import OutputArea from '../Output/outputArea.js';
 import Header from '../Header/header.js'
+import Footer from '../Footer/footer.js';
 
 // Importando as configurações dos botões
 import { menuOptions, renderContent } from '../Botoes/botao.js';
@@ -88,7 +89,7 @@ const App = () => {
     const { materia, alunoIndex, nota1, nota2, recuperacao } = formData;
     const nota1Val = parseFloat(nota1);
     const nota2Val = parseFloat(nota2);
-  
+
     // Validação de notas
     if (
       isNaN(nota1Val) || isNaN(nota2Val) ||
@@ -136,7 +137,7 @@ const App = () => {
       clearForm();
     }
   };
-  
+
   const calcularVagas = () => {
     const { materia } = formData;
     const vagas = turmas[materia].filter(nome => nome === 'VAGA').length;
@@ -146,7 +147,7 @@ const App = () => {
   const adicionarAluno = (materiaIndex, nomeAluno) => {
     const turmaAtual = turmas[materiaIndex];
     const vagaIndex = turmaAtual.findIndex(nome => nome === 'VAGA');
-    
+
     if (vagaIndex === -1) {
       setOutput('Turma lotada! Não há vagas disponíveis.');
       return;
@@ -154,7 +155,7 @@ const App = () => {
 
     const novasTurmas = {
       ...turmas,
-      [materiaIndex]: turmaAtual.map((nome, idx) => 
+      [materiaIndex]: turmaAtual.map((nome, idx) =>
         idx === vagaIndex ? nomeAluno : nome
       )
     };
@@ -165,7 +166,7 @@ const App = () => {
 
   const removerAluno = (materiaIndex, alunoIndex) => {
     const turmaAtual = turmas[materiaIndex];
-    
+
     if (turmaAtual[alunoIndex] === 'VAGA') {
       setOutput('Não é possível remover uma vaga.');
       return;
@@ -174,7 +175,7 @@ const App = () => {
     const nomeAluno = turmaAtual[alunoIndex];
     const novasTurmas = {
       ...turmas,
-      [materiaIndex]: turmaAtual.map((nome, idx) => 
+      [materiaIndex]: turmaAtual.map((nome, idx) =>
         idx === alunoIndex ? 'VAGA' : nome
       )
     };
@@ -182,19 +183,19 @@ const App = () => {
     // Limpar as notas do aluno removido
     const newNotas = {
       ...notas,
-      nota1: notas.nota1.map((arr, idx) => 
+      nota1: notas.nota1.map((arr, idx) =>
         idx === materiaIndex ? arr.map((nota, i) => i === alunoIndex ? -1 : nota) : arr
       ),
-      nota2: notas.nota2.map((arr, idx) => 
+      nota2: notas.nota2.map((arr, idx) =>
         idx === materiaIndex ? arr.map((nota, i) => i === alunoIndex ? -1 : nota) : arr
       ),
-      recuperacao: notas.recuperacao.map((arr, idx) => 
+      recuperacao: notas.recuperacao.map((arr, idx) =>
         idx === materiaIndex ? arr.map((nota, i) => i === alunoIndex ? -1 : nota) : arr
       ),
-      mediaInicial: notas.mediaInicial.map((arr, idx) => 
+      mediaInicial: notas.mediaInicial.map((arr, idx) =>
         idx === materiaIndex ? arr.map((nota, i) => i === alunoIndex ? -1 : nota) : arr
       ),
-      mediaFinal: notas.mediaFinal.map((arr, idx) => 
+      mediaFinal: notas.mediaFinal.map((arr, idx) =>
         idx === materiaIndex ? arr.map((nota, i) => i === alunoIndex ? -1 : nota) : arr
       )
     };
@@ -234,20 +235,23 @@ const App = () => {
     });
   };
 
-  return (
+    return (
     <div className={styles.App}>
       <Header />
+
       <main className={styles.main}>
-        <Menu 
+        <Menu
           menuOptions={menuOptions}
           opcaoAtiva={opcaoAtiva}
           handleClick={handleClick}
         />
-        
+
         {renderContentWrapper()}
-        
+
         <OutputArea output={output} />
       </main>
+
+      <Footer />
     </div>
   );
 };
