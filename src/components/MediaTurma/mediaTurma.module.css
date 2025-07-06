@@ -1,0 +1,140 @@
+.form-section {
+  background: linear-gradient(135deg, #005CAA 0%, #764ba2 100%);
+  border-radius: 16px;
+  padding: 24px;
+  margin: 20px 0;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.form-section:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+.form-title {
+  color: white;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  text-align: center;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.form-group {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.form-group::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.form-group:hover::before {
+  transform: scaleX(1);
+}
+
+.form-group:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.form-group strong {
+  color: #333;
+  font-size: 1.1rem;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 8px;
+  background: linear-gradient(45deg, #005CAA, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.form-group::after {
+  content: attr(data-media);
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #005CAA;
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.form-group:not(:hover)::after {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.6; }
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .form-section {
+    padding: 20px;
+    margin: 16px 0;
+  }
+  
+  .form-title {
+    font-size: 1.3rem;
+  }
+  
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .form-group {
+    padding: 16px;
+  }
+  
+  .form-group strong {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .form-section {
+    padding: 16px;
+    margin: 12px 0;
+  }
+  
+  .form-title {
+    font-size: 1.2rem;
+  }
+  
+  .form-group {
+    padding: 14px;
+  }
+}

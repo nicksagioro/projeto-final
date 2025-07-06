@@ -46,21 +46,19 @@
   color: white;
 }
 
-/* Garante que o conteúdo fique acima do overlay */
 .menu-btn > * {
   position: relative;
   z-index: 2;
 }
 
-/* Melhora a legibilidade do texto */
 .menu-btn .menu-title {
   font-weight: 600;
-  font-size: 1.1rem;
+  font-size: 1.4rem;
   margin-bottom: 0.25rem;
 }
 
 .menu-btn .menu-description {
-  font-size: 0.9rem;
+  font-size: 1.1rem;
   opacity: 0.8;
   line-height: 1.4;
 }

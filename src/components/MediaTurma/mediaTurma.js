@@ -3,6 +3,8 @@ import React from 'react';
 import styles from './mediaTurma.module.css';
 
 export default function MediaTurma({ turmas, notas }) {
+  const materias = [ 'Matemática', 'Português', 'Ciências'];
+  
   const calcularMediaTurma = (materiaIndex) => {
     const alunos = turmas[materiaIndex];
     if (!alunos || !Array.isArray(alunos) || alunos.length === 0) return 0;
@@ -27,7 +29,7 @@ export default function MediaTurma({ turmas, notas }) {
       <div className={styles['form-grid']}>
         {Object.keys(turmas).map((idx) => (
           <div key={idx} className={styles['form-group']}>
-            <strong>Matéria {Number(idx) + 1}:</strong> {calcularMediaTurma(Number(idx))}
+            <strong>{materias[Number(idx)] || `Matéria ${Number(idx) + 1}`}:</strong> {calcularMediaTurma(Number(idx))}
           </div>
         ))}
       </div>

@@ -7,7 +7,7 @@ import AdicionarAluno from '../AdicionarAluno/adicionarAluno.js';
 import RemoverAluno from '../RemoverAluno/removerAluno.js';
 import MostrarVagas from '../MostrarVagas/mostrarVagas.js';
 import OutputArea from '../Output/outputArea.js';
-import Header from '../Header/header.js';
+import Header from '../Header/header.js'
 
 // Importando as configurações dos botões
 import { menuOptions, renderContent } from '../Botoes/botao.js';
