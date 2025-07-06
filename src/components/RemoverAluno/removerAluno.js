@@ -45,7 +45,7 @@ export default function RemoverAluno({ materias, turmas, removerAluno }) {
           </select>
         </div>
 
-        <button type="submit" className={styles['btn-primary']}>
+        <button type="submit" className={styles['btn-quaternary']}>
           Remover
         </button>
 

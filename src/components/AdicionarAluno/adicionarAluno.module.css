@@ -1,0 +1,17 @@
+.btn-primary {
+    display: flex;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: rgb(0, 0, 0);
+    border: none;
+    border-radius: 10px;
+    width: 4%;
+    padding: 0.4rem 0.8rem;
+    align-items: center;
+    justify-content: center;
+       margin-top: 1rem; 
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    color: white;
+}

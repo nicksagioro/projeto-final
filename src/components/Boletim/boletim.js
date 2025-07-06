@@ -70,7 +70,7 @@ function Boletim({
 
       </div>
 
-      <button onClick={gerarBoletim} className={styles['btn-primary']}>
+      <button onClick={gerarBoletim} className={styles['btn-secondary']}>
         Imprimir Boletim
       </button>
     </div>

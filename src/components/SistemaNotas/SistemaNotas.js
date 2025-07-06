@@ -8,7 +8,9 @@ import RemoverAluno from '../RemoverAluno/removerAluno.js';
 import MostrarVagas from '../MostrarVagas/mostrarVagas.js';
 import OutputArea from '../Output/outputArea.js';
 import Header from '../Header/header.js';
-import Footer from '../footer/footer.js';
+
+// Importando as configurações dos botões
+import { menuOptions, renderContent } from '../Botoes/botao.js';
 
 // Styles
 import styles from './SistemaNotas.module.css';
@@ -141,5 +143,113 @@ const App = () => {
     setOutput(`Vagas disponíveis na turma de ${materias[materia]}: ${vagas}/${TOTAL_ALUNOS}`);
   };
 
-;
-}
+  const adicionarAluno = (materiaIndex, nomeAluno) => {
+    const turmaAtual = turmas[materiaIndex];
+    const vagaIndex = turmaAtual.findIndex(nome => nome === 'VAGA');
+    
+    if (vagaIndex === -1) {
+      setOutput('Turma lotada! Não há vagas disponíveis.');
+      return;
+    }
+
+    const novasTurmas = {
+      ...turmas,
+      [materiaIndex]: turmaAtual.map((nome, idx) => 
+        idx === vagaIndex ? nomeAluno : nome
+      )
+    };
+
+    setTurmas(novasTurmas);
+    setOutput(`Aluno ${nomeAluno} adicionado com sucesso na turma de ${materias[materiaIndex]}!`);
+  };
+
+  const removerAluno = (materiaIndex, alunoIndex) => {
+    const turmaAtual = turmas[materiaIndex];
+    
+    if (turmaAtual[alunoIndex] === 'VAGA') {
+      setOutput('Não é possível remover uma vaga.');
+      return;
+    }
+
+    const nomeAluno = turmaAtual[alunoIndex];
+    const novasTurmas = {
+      ...turmas,
+      [materiaIndex]: turmaAtual.map((nome, idx) => 
+        idx === alunoIndex ? 'VAGA' : nome
+      )
+    };
+
+    // Limpar as notas do aluno removido
+    const newNotas = {
+      ...notas,
+      nota1: notas.nota1.map((arr, idx) => 
+        idx === materiaIndex ? arr.map((nota, i) => i === alunoIndex ? -1 : nota) : arr
+      ),
+      nota2: notas.nota2.map((arr, idx) => 
+        idx === materiaIndex ? arr.map((nota, i) => i === alunoIndex ? -1 : nota) : arr
+      ),
+      recuperacao: notas.recuperacao.map((arr, idx) => 
+        idx === materiaIndex ? arr.map((nota, i) => i === alunoIndex ? -1 : nota) : arr
+      ),
+      mediaInicial: notas.mediaInicial.map((arr, idx) => 
+        idx === materiaIndex ? arr.map((nota, i) => i === alunoIndex ? -1 : nota) : arr
+      ),
+      mediaFinal: notas.mediaFinal.map((arr, idx) => 
+        idx === materiaIndex ? arr.map((nota, i) => i === alunoIndex ? -1 : nota) : arr
+      )
+    };
+
+    setTurmas(novasTurmas);
+    setNotas(newNotas);
+    setOutput(`Aluno ${nomeAluno} removido com sucesso da turma de ${materias[materiaIndex]}!`);
+  };
+
+  const handleClick = (opcao) => {
+    setOpcaoAtiva(opcao);
+    setOutput('');
+    clearForm();
+  };
+
+  // Função para renderizar o conteúdo usando a função importada
+  const renderContentWrapper = () => {
+    return renderContent(opcaoAtiva, {
+      formData,
+      turmas,
+      notas,
+      setNotas,
+      handleInputChange,
+      inserirNotas,
+      mostrarRecuperacao,
+      setOutput,
+      materias,
+      getAlunosComNotasOptions,
+      adicionarAluno,
+      removerAluno,
+      NotaAluno,
+      Boletim,
+      MediaTurma,
+      AdicionarAluno,
+      RemoverAluno,
+      MostrarVagas
+    });
+  };
+
+  return (
+    <div className={styles.App}>
+      <Header />
+      <main className={styles.main}>
+        <Menu 
+          menuOptions={menuOptions}
+          opcaoAtiva={opcaoAtiva}
+          handleClick={handleClick}
+        />
+        
+        {renderContentWrapper()}
+        
+        <OutputArea output={output} />
+      </main>
+    </div>
+  );
+};
+
+export default App;
